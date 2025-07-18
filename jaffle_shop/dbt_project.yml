@@ -34,3 +34,10 @@ models:
     +materialized: table
     staging:
       +materialized: view
+seeds:
+  jaffle_shop:    
+    schema: mappings
+    jaffle_shop:
+      schema: jaffle_shop
+    stripe:
+      schema: stripe
