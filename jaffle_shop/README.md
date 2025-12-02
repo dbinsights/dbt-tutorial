@@ -10,6 +10,9 @@ Install dbt packages
 - dbt --version
 
 ### Using the starter project
+Refer https://docs.getdbt.com/guides/manual-install?step=1
+
+
 Init starter project
 - dbt init jaffle_shop
 
@@ -43,8 +46,10 @@ seeds:
 ```
 
 Try running the following commands:
-- dbt run
+- dbt run -s model
 - dbt test
+- dbt docs generate  # generate docs for the project
+- dbt docs serve --port 8081  # launch the doc in local website, default 8080
 
 
 ### Resources:
