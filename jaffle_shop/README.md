@@ -46,12 +46,73 @@ seeds:
 10:53:56  
 10:53:56  Done. PASS=3 WARN=0 ERROR=0 SKIP=0 NO-OP=0 TOTAL=3
 ```
+#### Test
+Data Test:
+- Singular data test
+
+The simplest way to define a data test is by writing the exact SQL that will return failing records. We call these "singular" data tests, because they're one-off assertions usable for a single purpose.
+
+Note:
+  - Omit semicolons (;) at the end of the SQL statement in your singular test files, as they can cause your data test to fail.
+  - Singular data tests placed in the tests directory are automatically executed when running dbt test. Don't reference singular tests in model_name.yml, as they are not treated as generic tests or macros, and doing so will result in an error.
+
+- Generic data test
+
+Certain data tests are generic: they can be reused over and over again. A generic data test is defined in a test block, which contains a parametrized query and accepts arguments
+
+  - like macros
+```
+{% test not_null(model, column_name) %}
+
+    select *
+    from {{ model }}
+    where {{ column_name }} is null
+
+{% endtest %}
+```
+
+  - 4 builtin tests, unique, not_null, accepted_values and relationships.
+
+Recommend using *data_tests* for new project, as tests is still supported for backwords-compatibility.  
+
+```
+models:
+  - name: orders
+    columns:
+      - name: order_id
+        data_tests:
+          - unique
+          - not_null
+      - name: status
+        data_tests:
+          - accepted_values:
+              arguments: # available in v1.10.5 and higher. Older versions can set the <argument_name> as the top-level property.
+                values: ['placed', 'shipped', 'completed', 'returned']
+      - name: customer_id
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('customers')
+                field: id
+
+```
+
+Storing test failures
+
+Set the optional --store-failures flag
+
 
 Try running the following commands:
 - dbt run -s model
 - dbt test
 - dbt docs generate  # generate docs for the project
 - dbt docs serve --port 8081  # launch the doc in local website, default 8080
+
+
+Unit test
+
+https://docs.getdbt.com/docs/build/unit-tests
+
 
 
 ### Resources:
