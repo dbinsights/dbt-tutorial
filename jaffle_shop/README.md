@@ -21,6 +21,8 @@ Data seeds
 - Put csv and seeds folders
 - Configure schema mapping in project config
 - Auto add dbt_*** prefixes for schema name, more refer https://docs.getdbt.com/docs/build/custom-schemas
+- Seed table can be reference using {{ ref('payments') }}, and PSQL default column setting is case sensitive.
+
 
 ```
 seeds:
