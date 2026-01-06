@@ -9,9 +9,15 @@ order by 1
 
 {% set results = run_query(payment_methods_query) %}
 
-{{ log(results, info=True) }}
 
-{{ return([]) }}
+{% if execute %}
+{# Return the first column #}
+{% set results_list = results.columns[0].values() %}
+{% else %}
+{% set results_list = [] %}
+{% endif %}
+{{ log(results_list, info=True) }}
+
+{{ return(results_list) }}
 
 {% endmacro %}
-
