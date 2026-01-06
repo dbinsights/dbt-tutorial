@@ -1,3 +1,17 @@
 {% macro get_payment_methods() %}
-{{ return(["credit_card", "coupon", "bank_transfer", "gift_card"]) }}
+
+{% set payment_methods_query %}
+select distinct
+payment_method
+from {{ ref('stg_payments') }}
+order by 1
+{% endset %}
+
+{% set results = run_query(payment_methods_query) %}
+
+{{ log(results, info=True) }}
+
+{{ return([]) }}
+
 {% endmacro %}
+
