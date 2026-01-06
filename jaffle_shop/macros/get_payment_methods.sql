@@ -1,14 +1,13 @@
-{% macro get_payment_methods() %}
+{% macro get_column_values(column_name, relation) %}
 
-{% set payment_methods_query %}
+{% set relation_query %}
 select distinct
-payment_method
-from {{ ref('stg_payments') }}
+{{ column_name }}
+from {{ relation }}
 order by 1
 {% endset %}
 
-{% set results = run_query(payment_methods_query) %}
-
+{% set results = run_query(relation_query) %}
 
 {% if execute %}
 {# Return the first column #}
@@ -16,8 +15,14 @@ order by 1
 {% else %}
 {% set results_list = [] %}
 {% endif %}
-{{ log(results_list, info=True) }}
 
 {{ return(results_list) }}
+
+{% endmacro %}
+
+
+{% macro get_payment_methods() %}
+
+{{ return(get_column_values('payment_method', ref('stg_payments'))) }}
 
 {% endmacro %}
